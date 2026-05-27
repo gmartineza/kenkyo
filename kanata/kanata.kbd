@@ -12,9 +12,9 @@
 )
 
 (defsrc
-  q w e r t y u i o p
-  a s d f g h j k l ;
-  z x c v b n m , . /
+       q w e r t y u i o p
+       a s d f g h j k l ;
+  nubs z x c v b n m , . /
          spc
 )
 
@@ -59,55 +59,63 @@
 ;; These allow multiple keys to trigger a single action (e.g., w+e = esc)
 
 (defchords mtl $chord-timeout
-  (w  ) w
-  (  e) e
+  (w  ) l
+  (  e) d
   (w e) esc
 )
 
 (defchords mtr $chord-timeout
-  (i  ) i
-  (  o) o
+  (i  ) o
+  (  o) u
   (i o) bspc
 )
 
 (defchords mbl $chord-timeout
-  (x  ) (t! charmod x ralt)
-  (  c) c
-  (x c) tab
+  (z  ) x
+  (  x) m
+  (z x) tab
 )
 
 (defchords mbr $chord-timeout
-  (,  ) ,
-  (  .) (t! charmod . ralt)
+  (,  ) .
+  (  .) (t! charmod / ralt)
   (, .) ret
 )
 
 (deflayermap (main)
-  ;; Top row chords
+  q b
   w (chord mtl w)
   e (chord mtl e)
+  r w
+  t z
+  y '
+  u f
   i (chord mtr i)
   o (chord mtr o)
+  p j
 
-  ;; Home row modifiers
-  a (t! charmod a lmet)
-  s (t! charmod s lalt)
-  d (t! charmod d lsft)
-  f (t! charmod f lctl)
-  j (t! charmod j rctl)
-  k (t! charmod k rsft)
-  l (t! charmod l lalt)
-  ; (t! charmod ; rmet)
+  a (t! charmod n lmet)
+  s (t! charmod r lalt)
+  d (t! charmod t lsft)
+  f (t! charmod s lctl)
+  h y
+  j (t! charmod h rctl)
+  k (t! charmod a rsft)
+  l (t! charmod e lalt)
+  ; (t! charmod i rmet)
 
   ;; Bottom row modifiers
-  z (t! charmod z lctl) 
+  nubs q
+  z (chord mbl z)
   x (chord mbl x)
-  c (chord mbl c)
-  v (t! charmod v (layer-while-held fumbol))
-  m (t! charmod m (layer-while-held fumbol))
+  c (t! charmod c (layer-while-held fumbol))
+  v v
+  b q
+  n k
+  m (t! charmod p (layer-while-held fumbol))
   , (chord mbr ,)
   . (chord mbr .)
-  / (t! charmod / rctl)
+  / (t! charmod , rctl)
 
   ;; Space overloaded to 'extend' layer with state clearing logic
   spc (t! charmod spc (multi (layer-switch extend) (on-release tap-virtualkey clear)))
@@ -183,14 +191,14 @@
 )
 
 (defchords fbl $chord-timeout
-  (x  ) (t! charmod ` ralt)
+  (x  ) ´
   (  c) -
   (x c) tab
 )
 
 (defchords fbr $chord-timeout
   (,  ) [
-  (  .) (t! charmod ] ralt)
+  (  .) ]
   (, .) ret
 )
 
@@ -231,3 +239,5 @@
   . (chord fbr .)
   / (t! charmod \ lctl)
 )
+
+(
