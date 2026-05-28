@@ -12,6 +12,7 @@
 )
 
 (defsrc
+       f6 f7
        q w e r t y u i o p
        a s d f g h j k l ;
   nubs z x c v b n m , . /
@@ -83,6 +84,7 @@
 )
 
 (deflayermap (main)
+  f6 (layer-switch transparent)
   q b
   w (chord mtl w)
   e (chord mtl e)
@@ -191,7 +193,7 @@
 )
 
 (defchords fbl $chord-timeout
-  (x  ) ´
+  (x  ) '
   (  c) -
   (x c) tab
 )
@@ -240,4 +242,8 @@
   / (t! charmod \ lctl)
 )
 
-(
+
+(deflayermap (transparent)
+f6 (layer-switch main)
+f7 next
+)
