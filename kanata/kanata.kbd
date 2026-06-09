@@ -96,6 +96,7 @@
   ; (t! charmod i rmet)
 
   ;; Bottom row modifiers
+  lsft (t! charmod q lsft)
   nubs q
   z (chord mbl z)
   x (chord mbl x)
