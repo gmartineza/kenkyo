@@ -114,34 +114,33 @@
 )
 
 (deflayermap (extend)
-  ;; Navigation, media, and layer switching
-  e (on-press press-virtualkey shift)
-  r (layer-switch fumbol)
-  y ins
+  q prev
+  w next
+  e pp
+
+  y caps
   u home
   i up
   o end
   p pgup
 
-  ;; Modifiers
   a lmet
   s lalt
   d lsft
   f lctl
-  g comp
+  g lrld
 
-  ;; Navigation & Media
   h esc
   j left
   k down
   l rght
   ; pgdn
-  z mute
-  x vold
-  c volu
-  v pp
 
-  ;; Shortcuts
+  z vold
+  x volu
+  c C-ins
+  v S-ins
+
   n tab
   m bspc
   , spc
