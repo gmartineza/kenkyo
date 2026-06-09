@@ -9,14 +9,15 @@
 (defcfg
   ;; Process keys not explicitly defined in defsrc to ensure consistent state tracking.
   process-unmapped-keys yes
+  log-layer-changes no
 )
 
 (defsrc
-       f6 f7
-       q w e r t y u i o p
-       a s d f g h j k l ;
-  nubs z x c v b n m , . /
-         spc
+  f6 f7
+            q w e r t y u i o p
+            a s d f g h j k l ;
+  lsft nubs z x c v b n m , . /
+  spc
 )
 
 (defvar
@@ -42,11 +43,12 @@
 
 ;; 'charmod' implements home row modifiers.
 ;; It uses 'flowtap' to avoid mod misfires during fast typing.
-;; tap-hold-release-timeout resolves as a hold if another key is pressed and released.
+;; tap-hold-release resolves as a hold if another key is pressed and released while held.
+;; Lingering on the key without pressing another key produces no output.
 (deftemplate charmod (char mod)
   (t! flowtap
     $char
-    (tap-hold-release-timeout $tap-timeout $hold-timeout $char $mod $char reset-timeout-on-press)
+    (tap-hold-release $tap-timeout $hold-timeout $char $mod)
   )
 )
 
@@ -56,51 +58,38 @@
   clear (multi (layer-switch main) (on-press release-virtualkey shift))
 )
 
-;; Chord definitions for the 'main' layer
-;; These allow multiple keys to trigger a single action (e.g., w+e = esc)
-
-(defchords mtl $chord-timeout
-  (w  ) l
-  (  e) d
-  (w e) esc
-)
-
-(defchords mtr $chord-timeout
-  (i  ) o
-  (  o) u
-  (i o) bspc
-)
 
 (defchords mbl $chord-timeout
   (z  ) x
   (  x) m
-  (z x) tab
+  (z x) ret
 )
 
 (defchords mbr $chord-timeout
   (,  ) .
   (  .) (t! charmod / ralt)
-  (, .) ret
+  (, .) bspc
 )
 
 (deflayermap (main)
   f6 (layer-switch transparent)
   q b
-  w (chord mtl w)
-  e (chord mtl e)
+  w (t! charmod l (layer-while-held fumbol))
+  e d
   r w
   t z
   y -
   u f
-  i (chord mtr i)
-  o (chord mtr o)
+  i o
+  o (t! charmod u (layer-while-held fumbol))
   p j
 
   a (t! charmod n lmet)
   s (t! charmod r lalt)
   d (t! charmod t lsft)
   f (t! charmod s lctl)
-  h y
+  g (t! charmod g ralt)
+  h (t! charmod y ralt)
   j (t! charmod h rctl)
   k (t! charmod a rsft)
   l (t! charmod e lalt)
@@ -110,11 +99,11 @@
   nubs q
   z (chord mbl z)
   x (chord mbl x)
-  c (t! charmod c (layer-while-held fumbol))
+  c c
   v v
   b q
   n k
-  m (t! charmod p (layer-while-held fumbol))
+  m p
   , (chord mbr ,)
   . (chord mbr .)
   / (t! charmod , rctl)
@@ -193,14 +182,14 @@
 )
 
 (defchords fbl $chord-timeout
-  (x  ) '
-  (  c) -
+  (x  ) -
+  (  c) =
   (x c) tab
 )
 
 (defchords fbr $chord-timeout
-  (,  ) [
-  (  .) ]
+  (,  ) '
+  (  .) \
   (, .) ret
 )
 
@@ -229,17 +218,19 @@
   l (chord fcr l)
   ; (t! charmod 0 rmet)
 
-  ;; Bottom row: Symbols
-  z (t! charmod lsgt lctl)
+  ;; Bottom row: Symbols -=[]'\
+  lsft lsgt
+  nubs lsgt
+  z `
   x (chord fbl x)
   c (chord fbl c)
-  v =
+  v f11
   b f11
   n f12
-  m '
+  m [
   , (chord fbr ,)
   . (chord fbr .)
-  / (t! charmod \ lctl)
+  / ]
 )
 
 
